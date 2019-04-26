@@ -12,6 +12,7 @@ import re
 
 def thread1(url):
     for port in [0, 80, 88, 95, 101, 102, 105, 107, 109, 110, 111, 113, 115, 117, 119, 123, 137, 138, 139, 143, 161, 162, 163, 164, 174, 177, 178, 179, 191, 194, 199, 201]:
+        
         try:
             t = threading.Thread(target=scan, args=(url, port, ))
             t.start()
@@ -47,7 +48,7 @@ def thread3(url):
             pass
 
 def thread4(url):
-    for port in [992, 993, 994, 995, 512, 513, 514, 515, 1080, 1236, 1300, 1433, 1434, 1494, 1512, 1524, 1525, 1645, 1646, 1649, 1701, 1718, 1719, 1720, 1758, 1759, 1789, 1812, 1813, 1911, 1985, 1986, 1997, 2049, 2102, 2103, 2104, 2401, 2430, 2431, 2432, 2433, 2600, 2601, 2602, 2603, 2604, 2605, 2606, 2809, 3130, 3306, 3346, 4011, 4321, 4444, 5002, 5308, 5999, 6000, 7000, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 9876, 10080, 11371, 11720, 13720, 13721, 13722, 13724, 13782, 13783, 22273, 26000, 26208, 33434]:
+    for port in [992, 993, 994, 995, 512, 513, 514, 515, 1080, 1236, 1300, 1433, 1434, 1494, 1512, 1524, 1525, 1645, 1646, 1649, 1701, 1718, 1719, 1720, 1758, 1759, 1789, 1812, 1813, 1911, 1985, 1986, 1997, 2375, 2049, 2102, 2103, 2104, 2401, 2430, 2431, 2432, 2433, 2600, 2601, 2602, 2603, 2604, 2605, 2606, 2809, 3130, 3306, 3346, 4011, 4321, 4444, 5002, 5308, 5999, 6000, 7000, 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 9876, 10080, 11371, 11720, 13720, 13721, 13722, 13724, 13782, 13783, 22273, 26000, 26208, 33434]:
         try:
             t = threading.Thread(target=scan, args=(url, port, ))
             t.start()
@@ -65,6 +66,7 @@ def so(url):
     threading.Thread(target=thread3, args=(url, )).start()
     threading.Thread(target=thread4, args=(url, )).start()
 
+
 def scan(url, port):
 
     mulu= ['/dump',
@@ -77,7 +79,7 @@ def scan(url, port):
            '/.htaccess',
            '/admin',
            '/WEB-INF/web.xml',
-		   '/webpage/system/druid/websession.json',
+           '/webpage/system/druid/websession.json',
            '/.svn/entries',
            '/cms',
            '/FCKeditor',
@@ -129,14 +131,16 @@ def scan(url, port):
            '/web-console',
            '/zh-CN/app/Callat/home',
            '/webalizer',
-		   '/ws/services',
-		   '/ws/services/HelloServices?wsdl',
+           '/ws/services',
+           '/ws/services/HelloServices?wsdl',
            '/cgi-bin/hello.bat?&C%3A%5CWindows%5CSystem32%5C',
-		   '/foo/default/master/..%252F..%252F..%252F..%252Fetc%252fpasswd',
-		   '/foo/default/master/../../../etc/passwd',
-		   '/index.php?s=index/think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=whoami',
+           '/foo/default/master/..%252F..%252F..%252F..%252Fetc%252fpasswd',
+           '/foo/default/master/../../../etc/passwd',
+           '/index.php?s=index/think\\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=whoami',
            '/login?from=%2F',
-           '/jenkins'
+           '/jenkins',
+           '/_async/AsyncResponseService',
+           '/containers/json '#Docker Remote API
            ]
     try:
         header = {
@@ -151,19 +155,13 @@ def scan(url, port):
             'Referer': 'http://'+url,
             'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8'
         }
-        #file = open('result.txt', 'w+')
-        if 'http' in url:
-            url2 = url+":"+str(port)
-        else:
-            url2 = 'http://'+url+":"+str(port)
-
         if port == 0:
-            url2 = "https://"+url
+            url2 = str(url).replace('http:', 'https:')
 
-
+        else:
+            url2 = url+':'+str(port)
         #context = ssl._create_unverified_context()
         reponse = requests.get(url2, timeout=3, headers=header)
-
         code = reponse.status_code
 
         try:
@@ -239,7 +237,12 @@ if __name__ == '__main__':
     lines = urllist.readlines()
     n = 5
     for line in lines:
-        so(line.replace('\n',''))
+        url = line.replace('\n','')
+        if 'https://' in url:
+            url = url.replace('https', 'http')
+        else:
+            url = 'http://'+url
+        so(url)
         n = n - 1
 
     urllist.close()
