@@ -12,7 +12,7 @@ import re
 
 def thread1(url):
     for port in [0, 80, 88, 95, 101, 102, 105, 107, 109, 110, 111, 113, 115, 117, 119, 123, 137, 138, 139, 143, 161, 162, 163, 164, 174, 177, 178, 179, 191, 194, 199, 201]:
-        
+
         try:
             t = threading.Thread(target=scan, args=(url, port, ))
             t.start()
@@ -160,7 +160,9 @@ def scan(url, port):
 
         else:
             url2 = url+':'+str(port)
+
         #context = ssl._create_unverified_context()
+        print(url2)
         reponse = requests.get(url2, timeout=3, headers=header)
         code = reponse.status_code
 
