@@ -140,7 +140,9 @@ def scan(url, port):
            '/login?from=%2F',
            '/jenkins',
            '/_async/AsyncResponseService',
-           '/containers/json '#Docker Remote API
+           '/containers/json ',#Docker Remote API
+           '/mailsms/s?func=ADMIN:appState&dumpConfig=/',#coremail  0day
+           '/seeyon/htmlofficeservlet'
            ]
     try:
         header = {
@@ -240,8 +242,8 @@ if __name__ == '__main__':
     n = 5
     for line in lines:
         url = line.replace('\n','')
-        if 'https://' in url:
-            url = url.replace('https', 'http')
+        if str(url).startswith("http"):
+            url = url
         else:
             url = 'http://'+url
         so(url)
